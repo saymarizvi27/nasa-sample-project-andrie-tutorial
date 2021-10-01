@@ -41,6 +41,7 @@ const Upcoming = props => {
           <td>{launch.mission}</td>
           <td>{launch.rocket}</td>
           <td>{launch.target}</td>
+          <td>{launch.destination}</td>
         </tr>;
       });
   }, [launches, abortLaunch, classes.link]);
