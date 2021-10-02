@@ -1,9 +1,22 @@
-const { getAllLaunches , addNewLaunch } = require('../../models/launch.model');
+const { getAllLaunches , addNewLaunch , existsLaunchId ,abortLaunchById } = require('../../models/launch.model');
 
 function httpGetAllLaunches(req,res){
     //with json Array works perfectly thats why we convert it into array from map
     return res.status(200).json(getAllLaunches());
 }
+
+function httpAbortLaunch(req,res){
+    const id = Number(req.params.id);
+    
+    if (!existsLaunchId(id)){
+        return res.status(404).json({
+            error: 'Launch not found',
+        });
+    }
+    const aborted = abortLaunchById(id);
+    return res.status(200).json(aborted);
+}
+
 
 function httpAddNewLaunch(req,res){
     const launch = req.body;
@@ -26,4 +39,5 @@ function httpAddNewLaunch(req,res){
 module.exports = {
     httpGetAllLaunches ,
     httpAddNewLaunch,
+    httpAbortLaunch,
 }
