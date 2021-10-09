@@ -12,7 +12,8 @@
     "server": "npm run watch --prefix server",
     "watch": "concurrently \"npm run server\"  \"npm run client\"",
     "start": "nodemon src/server.js",
-    "deploy": "cd client && npm run build && cd .. && npm start --prefix server"
+    "deploy": "cd client && npm run build && cd .. && npm start --prefix server",
+    "deploy-cluster": "cd client && npm run build && cd .. && npm run cluster --prefix server"
   },
   "keywords": [],
   "author": "",
