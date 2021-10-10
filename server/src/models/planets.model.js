@@ -2,7 +2,9 @@ const parse = require('csv-parse');
 const fs = require('fs');
 const path = require('path');
 
-const isHabitablePlanets = [];
+const planets = require('./planets.mongo');
+
+
 
 function isHabitablePlanet(planet) {
     return planet['koi_disposition'] === 'CONFIRMED'
@@ -26,35 +28,50 @@ console.log(result);
 
 function loadPlanetData() {
     return new Promise((resolve, reject) => {
-        fs.createReadStream(path.join(__dirname,'..','..','data','cumulative_2021.09.18_04.13.03.csv'))
-        //connects read to reading source to write source 
-        //readable stream to writable stream
-        .pipe(parse({
-            comment: '#',
-            columns: true,
-        }))
-        .on('data', (data) => {
-            if (isHabitablePlanet(data)) {
-                isHabitablePlanets.push(data);
-            }
-        })
-        .on('error', (err) => {
-            console.log(err);
-            reject(err);
-        })
-        .on('end', () => {
-            console.log(isHabitablePlanets.map((planet) => {
-                return planet['kepler_name'];
-            }));
-            console.log('done');
-            resolve();
-        })
-      
+        fs.createReadStream(path.join(__dirname, '..', '..', 'data', 'cumulative_2021.09.18_04.13.03.csv'))
+            //connects read to reading source to write source 
+            //readable stream to writable stream
+            .pipe(parse({
+                comment: '#',
+                columns: true,
+            }))
+            .on('data', async (data) => {
+                if (isHabitablePlanet(data)) {
+                    //insert+update = upsert
+                    await savePlanets(data);
+                }
+            })
+            .on('error', (err) => {
+                console.log(err);
+                reject(err);
+            })
+            .on('end', async () => {
+                const countPlanetsFound = (await getAllPlanets()).length; 
+                console.log('done',countPlanetsFound);
+                resolve();
+            })
+
     })
 }
 
-function getAllPlanets(){
-    return isHabitablePlanets;
+async function getAllPlanets() {
+    const planetList= await planets.find({  
+    });
+    return planetList;
+}
+async function savePlanets(data){
+    try{
+    await planets.updateOne({
+        keplerName: data.kepler_name
+    },{
+        keplerName: data.kepler_name
+    },{
+        upsert:true
+    });
+    }
+    catch(err){
+        console.error(`Could not save planet ${err}`)
+    }
 }
 module.exports = {
     loadPlanetData,
