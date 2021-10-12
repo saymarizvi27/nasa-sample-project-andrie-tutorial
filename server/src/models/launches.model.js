@@ -75,15 +75,20 @@ async function getLatestFlightNumber(){
     }
     return latestLaunch.flightNumber;
 }
-function existsLaunchId(launchId) {
-    return launches.has(launchId);
+async function existsLaunchId(launchId) {
+    return await launches.findOne({flightNumber:Number(launchId)});
 }
 
-function abortLaunchById(launchId) {
-    const aboarted = launches.get(launchId);
-    aboarted.upcoming = false;
-    aboarted.success = false;
-    return aboarted;
+async function abortLaunchById(launchId) {
+
+    const aboarted = await launches.updateOne({
+        flightNumber:Number(launchId)
+    },{
+        upcoming:false,
+        success:false,
+    })
+    console.log('This is aborted',aboarted);
+    return aboarted.modifiedCount === 1 && aboarted.acknowledged === true;
 }
 
 

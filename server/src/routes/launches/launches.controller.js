@@ -5,16 +5,25 @@ async function httpGetAllLaunches(req,res){
     return res.status(200).json(await getAllLaunches());
 }
 
-function httpAbortLaunch(req,res){
+async function httpAbortLaunch(req,res){
     const id = Number(req.params.id);
-    
-    if (!existsLaunchId(id)){
+    const launchId = await existsLaunchId(id);
+    console.log(launchId,"launchId")
+    if (!launchId){
         return res.status(404).json({
             error: 'Launch not found',
         });
     }
-    const aborted = abortLaunchById(id);
-    return res.status(200).json(aborted);
+    const aborted = await abortLaunchById(id);
+    console.log(aborted,"aborted");
+    if (!aborted){
+        return res.status(400).json({
+            error: 'Launch not aborted',
+        });
+    }
+    return res.status(200).json({
+        ok: true
+    });
 }
 
 
