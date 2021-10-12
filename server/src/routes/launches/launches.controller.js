@@ -1,8 +1,8 @@
-const { getAllLaunches , addNewLaunch , existsLaunchId ,abortLaunchById } = require('../../models/launch.model');
+const { getAllLaunches , addNewLaunch , existsLaunchId ,abortLaunchById } = require('../../models/launches.model');
 
-function httpGetAllLaunches(req,res){
+async function httpGetAllLaunches(req,res){
     //with json Array works perfectly thats why we convert it into array from map
-    return res.status(200).json(getAllLaunches());
+    return res.status(200).json(await getAllLaunches());
 }
 
 function httpAbortLaunch(req,res){
@@ -18,7 +18,7 @@ function httpAbortLaunch(req,res){
 }
 
 
-function httpAddNewLaunch(req,res){
+async function httpAddNewLaunch(req,res){
     const launch = req.body;
     if(!launch.mission || !launch.rocket || !launch.launchDate || !launch.target){
         return res.status(400).json({
@@ -31,7 +31,7 @@ function httpAddNewLaunch(req,res){
             error: 'Invalid launch date',
         });
     }
-    addNewLaunch(launch);
+    await addNewLaunch(launch);
     return res.status(201).json(launch);
 
 }

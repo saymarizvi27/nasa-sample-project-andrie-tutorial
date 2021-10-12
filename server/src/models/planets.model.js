@@ -56,6 +56,9 @@ function loadPlanetData() {
 
 async function getAllPlanets() {
     const planetList= await planets.find({  
+    },{
+        '_id':0,
+        '__v':0
     });
     return planetList;
 }
