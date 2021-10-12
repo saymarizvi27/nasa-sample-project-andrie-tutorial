@@ -10,7 +10,7 @@ const { saveStartLaunch } = require('./models/launches.model');
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
-const MONGO_URL = "smongodb+srv://admin:Tt6EDIOiwCQxUXc2@cluster0.znv9h.mongodb.net/nasa?retryWrites=true&w=majority";
+const MONGO_URL = "";
 
 mongoose.connection.once('open',()=>{
     console.log('MongoDB connection is ready');
