@@ -1,14 +1,14 @@
-const API_URL = 'v1';
+const API_URL = 'http://localhost:8000/v1';
 
 // Load planets and return as JSON.
 async function httpGetPlanets() {
-  const response = await fetch(`http://localhost:8000/planets`);
+  const response = await fetch(`http://localhost:8000/v1/planets`);
   return await response.json();
 }
 
 // Load launches, sort by flight number, and return as JSON.
 async function httpGetLaunches() {
-  const response = await fetch(`http://localhost:8000/launches`);
+  const response = await fetch(`http://localhost:8000/v1/launches`);
   const fetchedLaunches = await response.json();
   return fetchedLaunches.sort((a, b) => {
     return a.flightNumber - b.flightNumber;
@@ -19,7 +19,7 @@ async function httpGetLaunches() {
 async function httpSubmitLaunch(launch) {
   try {
     //fetch function is default to get funtion 
-    return await fetch(`http://localhost:8000/launches`, {
+    return await fetch(`http://localhost:8000/v1/launches`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ async function httpSubmitLaunch(launch) {
 // Delete launch with given ID.
 async function httpAbortLaunch(id) {
   try {
-    return await fetch(`http://localhost:8000/launches/${id}`, {
+    return await fetch(`http://localhost:8000/v1/launches/${id}`, {
       method: "delete",
     });
   } catch(err) {

@@ -87,7 +87,6 @@ async function abortLaunchById(launchId) {
         upcoming:false,
         success:false,
     })
-    console.log('This is aborted',aboarted);
     return aboarted.modifiedCount === 1 && aboarted.acknowledged === true;
 }
 

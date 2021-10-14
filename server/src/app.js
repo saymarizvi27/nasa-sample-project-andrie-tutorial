@@ -1,10 +1,8 @@
 const express = require('express');
-const planetsRouter = require('./routes/planets/planets.router');
-const launchesRouter = require('./routes/launches/launches.routes');
 const cors = require('cors');
 const morgan = require('morgan');
 var rfs = require('rotating-file-stream') 
-
+const api = require('./routes/api.js');
 const app = express();
 const path = require('path');
 
@@ -21,8 +19,8 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname,'..','public')));
-app.use('/planets', planetsRouter);
-app.use('/launches', launchesRouter);
+app.use('/v1', api);
+
 //it matches anything using * 
 app.get('/*',(req,res) =>{
     res.sendFile(path.join(__dirname,'..','public','index.html'));
