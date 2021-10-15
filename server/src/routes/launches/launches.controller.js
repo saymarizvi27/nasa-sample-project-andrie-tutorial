@@ -8,14 +8,12 @@ async function httpGetAllLaunches(req,res){
 async function httpAbortLaunch(req,res){
     const id = Number(req.params.id);
     const launchId = await existsLaunchId(id);
-    console.log(launchId,"launchId")
     if (!launchId){
         return res.status(404).json({
             error: 'Launch not found',
         });
     }
     const aborted = await abortLaunchById(id);
-    console.log(aborted,"aborted");
     if (!aborted){
         return res.status(400).json({
             error: 'Launch not aborted',
